@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PickTrace — Receiving Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',Arial,sans-serif;color:#333;line-height:1.7;font-size:14px;font-weight:400;background:#fff}
+img{max-width:100%;height:auto;display:block}
+a{color:#2ea3f2;text-decoration:none}
+
+/* Header */
+.pt-header{background:#1a1a2e;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.pt-logo{font-size:18px;font-weight:700;color:#fff;letter-spacing:1.5px;text-transform:uppercase}
+.pt-header-sub{font-size:12px;color:rgba(255,255,255,0.5);font-weight:400;margin-left:12px;letter-spacing:0.3px}
+.pt-nav{display:flex;gap:6px}
+.pt-nav button{padding:8px 16px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);background:none;border:1px solid transparent;border-radius:6px;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.pt-nav button:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.pt-nav button.active{color:#fff;background:rgba(46,163,242,0.15);border-color:rgba(46,163,242,0.3)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:80px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="80" cy="20" r="40" fill="rgba(46,163,242,0.03)"/><circle cx="20" cy="80" r="30" fill="rgba(46,163,242,0.02)"/></svg>');background-size:cover}
+.hero-label{font-size:13px;font-weight:700;color:#2ea3f2;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:36px;font-weight:700;color:#fff;line-height:1.3;max-width:680px;margin:0 auto 16px;position:relative}
+.hero p{font-size:16px;color:rgba(255,255,255,0.65);max-width:620px;margin:0 auto;line-height:1.7;position:relative}
+
+/* Sections */
+.container{max-width:1100px;margin:0 auto;padding:0 40px}
+.section{padding:70px 0;border-bottom:1px solid #eee}
+.section:last-child{border-bottom:none}
+.section-alt{background:#f8f9fb}
+
+/* Feature rows — alternating text + image */
+.feature{display:flex;align-items:center;gap:100px}
+.feature-reverse{flex-direction:row-reverse}
+.feature-text{flex:1 1 0;min-width:0}
+.feature-media{flex:0 0 auto;min-width:0;display:flex;justify-content:center;align-items:center}
+
+.feature-label{font-size:11px;font-weight:700;color:#2ea3f2;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px}
+.feature-text h2{font-size:26px;font-weight:700;color:#1a1a2e;line-height:1.3;margin-bottom:14px}
+.feature-text p{font-size:14px;color:#555;line-height:1.8;margin-bottom:16px}
+.steps{list-style:none;margin:0;padding:0}
+.step{display:flex;gap:12px;align-items:flex-start;padding:8px 0}
+.step-num{width:24px;height:24px;border-radius:50%;background:#2ea3f2;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-text{font-size:13px;color:#444;line-height:1.7}
+.step-sub{font-size:12px;color:#888;margin-top:3px;line-height:1.6}
+
+/* Screenshot frame — matches the iPhone's actual shape ratio (477:947).
+   Source PNG iphone-cutout.png is 1024x1024; phone outline at x=267→743 / y=41→988.
+   The phone is NOT centered in the PNG canvas (center at x=505 vs canvas 512),
+   so background-position is shifted to 48.73% 53.24% to put the phone shape at
+   true container center — otherwise the screenshot overflows on the right.
+   Background zoomed to 214.7% so the iPhone fills the frame edge-to-edge.
+   Border-radius (13.84% × 7.92%) matches the measured outline corner Rx=66/Ry=75.
+   Screenshot top:-4% pushes its baked-in status bar into the bezel area. */
+.phone-frame{position:relative;width:min(320px,38vw);aspect-ratio:477/947;flex-shrink:0;background:transparent;border:none;border-radius:13.84%/7.92%;box-shadow:none;overflow:hidden}
+.phone-frame img{position:absolute;top:-4%;left:0;width:100%;height:104%;object-fit:cover;object-position:center top;z-index:1;display:block}
+.phone-frame::after{content:'';position:absolute;inset:0;background:url('images/iphone-cutout.png') 48.73% 53.24%/214.7% auto no-repeat;pointer-events:none;z-index:2}
+
+/* Desktop screenshot frame */
+.browser-frame{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.1);border:1px solid #e0e0e0}
+.browser-bar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#f5f5f5;border-bottom:1px solid #e0e0e0}
+.browser-dot{width:8px;height:8px;border-radius:50%}
+.browser-dot.r{background:#ff5f57}
+.browser-dot.y{background:#febc2e}
+.browser-dot.g{background:#28c840}
+.browser-bar-url{flex:1;margin-left:10px;height:18px;background:#e8e8e8;border-radius:4px}
+.browser-frame img{width:100%;display:block}
+
+/* Multi-screenshot layout */
+.phone-group{display:flex;gap:18px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+.phone-group .phone-frame{width:min(250px,26vw);aspect-ratio:477/947}
+.phone-group.triple .phone-frame{width:min(190px,21vw);aspect-ratio:477/947}
+.phone-group.quad .phone-frame{width:min(220px,22vw);aspect-ratio:477/947}
+
+/* Tip callout */
+.tip{background:#e8f4fd;border-left:3px solid #2ea3f2;padding:12px 16px;border-radius:0 8px 8px 0;font-size:12px;color:#1a1a2e;margin:16px 0;line-height:1.7}
+.tip strong{color:#0f3460}
+.warning{background:#fff3e0;border-left:3px solid #f57c00;padding:12px 16px;border-radius:0 8px 8px 0;font-size:12px;color:#4e342e;margin:16px 0;line-height:1.7}
+.critical{background:#fce4ec;border-left:3px solid #c62828;padding:12px 16px;border-radius:0 8px 8px 0;font-size:12px;color:#4a1010;margin:16px 0;line-height:1.7}
+
+/* Barcode format highlight */
+.format-block{background:#f0f4f8;border-radius:10px;padding:20px 24px;margin:16px 0;text-align:center}
+.format-code{font-family:'Courier New',monospace;font-size:28px;font-weight:700;color:#1a1a2e;letter-spacing:2px;margin-bottom:6px}
+.format-desc{font-size:12px;color:#666;line-height:1.6}
+
+/* Scope cards */
+.scope-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}
+.scope-card{border:1px solid #e8e8e8;border-radius:10px;padding:16px;background:#fff}
+.scope-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;margin-bottom:8px;letter-spacing:0.5px}
+.scope-card h4{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:4px}
+.scope-card p{font-size:12px;color:#666;line-height:1.6}
+
+/* Status description row */
+.status-desc-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:12px}
+.status-desc-item{text-align:center;padding:10px 8px;font-size:12px;color:#666;line-height:1.5}
+.status-desc-item strong{display:block;font-size:12px;color:#1a1a2e;margin-bottom:2px}
+
+/* Permissions table */
+.perm-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee;font-size:13px;gap:14px}
+.perm-row:last-child{border-bottom:none}
+.perm-name{font-weight:600;color:#1a1a2e}
+.perm-desc{color:#888;font-size:12px;margin-top:2px}
+.perm-badge{padding:4px 12px;border-radius:100px;font-size:11px;font-weight:600;white-space:nowrap}
+
+/* CTA button */
+.btn{display:inline-block;padding:12px 28px;background:#2ea3f2;color:#fff;font-size:13px;font-weight:600;border-radius:6px;border:none;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn:hover{background:#1b8fd8}
+
+/* ── Stage flow strip on hero ── */
+.flow-strip{display:flex;justify-content:center;align-items:center;gap:8px;margin:36px auto 0;flex-wrap:wrap;max-width:900px;position:relative}
+.flow-step{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,0.45);padding:8px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:100px;transition:all .2s}
+.flow-step.is-current{color:#2ea3f2;border-color:rgba(46,163,242,0.4);background:rgba(46,163,242,0.08)}
+.flow-arrow{color:rgba(255,255,255,0.25);font-size:14px;display:flex;align-items:center}
+
+/* ── Persona key pill ── */
+.persona-key{display:inline-block;color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:10px;background:#1a1a2e}
+.persona-key.checker{background:#0d47a1}
+.persona-key.yard{background:#e65100}
+.persona-key.receiver{background:#1b5e20}
+.persona-key.office{background:#6a1b9a}
+
+/* ── Handoff diagram ── */
+.handoff-flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px 0;padding:24px;background:#fff;border:1px solid #e8e8e8;border-radius:12px}
+.handoff-node{flex:0 0 auto;text-align:center;padding:14px 18px;border-radius:10px;background:#f0f4f8;border:1px solid #d6dde6;min-width:110px}
+.handoff-node.is-yard{background:#fff3e0;border-color:#ffd49a}
+.handoff-node.is-cold{background:#e8f5e9;border-color:#a5d6a7}
+.handoff-node-title{font-size:12px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.handoff-node-sub{font-size:10px;color:#666;letter-spacing:0.5px;text-transform:uppercase}
+.handoff-arrow{color:#2ea3f2;font-size:18px;font-weight:700}
+
+/* ── Two-column split ── */
+.split-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px}
+.split-2 .col{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:20px}
+.split-2 .col h4{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:8px}
+.split-2 .col p{font-size:13px;color:#555;line-height:1.7;margin-bottom:8px}
+.split-2 .col .req-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:10px}
+.split-2 .col .req-tag.always{background:#e8f5e9;color:#1b5e20}
+.split-2 .col .req-tag.conditional{background:#fff3e0;color:#e65100}
+
+/* ── Persona grid ── */
+.persona-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+.persona-card{border:1px solid #e8e8e8;border-radius:10px;padding:16px;background:#fff}
+.persona-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase;background:#f0f4f8;color:#1a1a2e}
+.persona-badge.checker{background:#e3f2fd;color:#0d47a1}
+.persona-badge.yard{background:#fff3e0;color:#e65100}
+.persona-badge.receiver{background:#e8f5e9;color:#1b5e20}
+.persona-badge.office{background:#f3e5f5;color:#6a1b9a}
+.persona-card h4{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:6px}
+.persona-card .pc-meta{font-size:11px;color:#888;line-height:1.5;margin-bottom:8px}
+.persona-card p{font-size:12px;color:#666;line-height:1.6}
+
+/* ── Laptop breakpoint (1024–1280px) ── */
+@media(max-width:1280px){
+  .feature,.feature-reverse{gap:50px}
+  .phone-frame{width:min(280px,32vw)}
+  .phone-group .phone-frame{width:min(220px,23vw)}
+  .phone-group.triple .phone-frame{width:min(165px,18vw)}
+  .phone-group.quad .phone-frame{width:min(190px,20vw)}
+}
+
+/* ── Tablet/small laptop — stack vertically ── */
+@media(max-width:900px){
+  .feature,.feature-reverse{flex-direction:column;gap:40px}
+  .feature-media{width:100%;justify-content:center}
+  .phone-frame{width:min(280px,55vw)}
+  .phone-group .phone-frame{width:min(260px,42vw)}
+  .phone-group.triple .phone-frame{width:min(190px,30vw)}
+  .phone-group.quad .phone-frame{width:min(170px,26vw)}
+  .scope-grid{grid-template-columns:1fr 1fr}
+  .persona-grid{grid-template-columns:1fr 1fr}
+  .split-2{grid-template-columns:1fr}
+  .handoff-flow{padding:16px;flex-direction:column}
+  .handoff-arrow{transform:rotate(90deg)}
+  .handoff-node{min-width:140px}
+}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  .hero{padding:50px 20px}
+  .hero h1{font-size:26px}
+  .container{padding:0 20px}
+  .section{padding:40px 0}
+  .pt-header{padding:14px 16px;flex-wrap:wrap;gap:10px}
+  .pt-nav{overflow-x:auto;flex-wrap:nowrap;width:100%}
+  .scope-grid{grid-template-columns:1fr}
+  .persona-grid{grid-template-columns:1fr}
+  .status-desc-row{grid-template-columns:repeat(5,1fr);font-size:10px}
+  .phone-group{flex-wrap:wrap}
+  .phone-group .phone-frame{width:min(240px,75vw)}
+  .phone-group.triple .phone-frame{width:min(170px,42vw)}
+  .phone-group.quad .phone-frame{width:min(150px,42vw)}
+  .flow-strip{gap:4px}
+  .flow-step{font-size:9px;padding:6px 10px;letter-spacing:0.8px}
+  .flow-arrow{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="pt-header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="https://picktrace.com/wp-content/uploads/2022/03/Web22-PicktraceLogo80.png" alt="PickTrace" style="height:28px">
+    <span class="pt-header-sub">Receiving Guide</span>
+  </div>
+  <nav class="pt-nav">
+    <button class="active" onclick="switchTab('setup',this)">Setup</button>
+    <button onclick="switchTab('field',this)">In the Field</button>
+    <button onclick="switchTab('handoff',this)">Staging Yard Handoff</button>
+    <button onclick="switchTab('cold',this)">At Cold Storage</button>
+    <button onclick="switchTab('office',this)">Office Oversight</button>
+  </nav>
+</div>
+
+<!-- ═══ TAB 1 — SETUP ═══ -->
+<div id="tab-setup" class="tab-panel">
+
+<div class="hero">
+  <div class="hero-label">Stage 1 of 5 · Setup</div>
+  <h1>Set up the receiving program before harvest</h1>
+  <p>Six pieces have to land before the first truck rolls — pack styles in the system, the office admin trained on harvest crew schedules, #FT sticker rolls ordered, the WMS integration module purchased, every truck's QR magnet registered, and the Receiving App deployed to the C66s. The persona map at the bottom of this tab is your who-does-what reference for the rest of the guide.</p>
+  <div class="flow-strip">
+    <span class="flow-step is-current">Setup</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">In the Field</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Staging Yard Handoff</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">At Cold Storage</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Office Oversight</span>
+  </div>
+</div>
+
+<!-- §1.1 Pack Styles & Crew Schedule Training -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key office">Office</span>
+      <div class="feature-label">Pre-Harvest Data</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Every retail pack style needs to live in PickTrace</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">Once Receiving is on, one pack style per piece rate is no longer enough. Each retail variant — every clamshell, bag, or box destined for a specific buyer — needs its own entry in PickTrace so it can map to the right cost code in the WMS at receiving time. Even when piece rates are identical across variants, the variants themselves can't be collapsed.</p>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div><div class="step-text">In the Pack Styles section, download the import template.</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-text">Fill in every retail-specific pack style — not generic categories. Bulk import.</div></div></li>
+        <li class="step"><div class="step-num">3</div><div><div class="step-text">Apply piece rates across the new pack styles using the bulk-apply path so you're not editing crew schedules one row at a time.</div><div class="step-sub">Apply piece rate to multiple pack styles at once; apply pack styles across blocks/locations in one pass.</div></div></li>
+        <li class="step"><div class="step-num">4</div><div><div class="step-text">Confirm cost-code mappings with the Controller before harvest opens.</div></div></li>
+      </ul>
+      <div class="tip"><strong>Volume × volume.</strong> The office gets nervous about this step because it's pack-style count multiplied by daily-crew-schedule count — the manual path scales badly. The bulk-apply path is the only realistic way to set this up at scale; surface it early.</div>
+      <div class="tip"><strong>Crew schedule training is a separate gap.</strong> The office admin doing crew schedules has been trained on the non-harvest variant of crew schedules but <em>not</em> on the harvest variant — which is the one that requires selecting the correct pack style per crew per day. Run a hands-on session specifically on harvest crew schedules in addition to the pack-style import. Treat it as its own training event, not a footnote.</div>
+      <div class="warning"><strong>Don't ship without this.</strong> If pack styles aren't in PickTrace before harvest opens, the WMS write at cold storage either fails or creates malformed records — there's no per-pack mapping to send. Missing pack styles surface as receiving errors, not as setup errors, which makes them slow to debug under harvest pressure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §1.2 #FT Pallet Sticker Rolls -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature">
+      <div class="feature-text">
+        <span class="persona-key checker">Harvest Checker</span>
+        <div class="feature-label">Sticker Spec</div>
+        <h2>Order the #FT sticker rolls separately from existing label rolls</h2>
+        <p>#FT stickers are temporary pallet identifiers applied at loadout in the field. They are <strong>not</strong> the existing T&amp;P label rolls and they are <strong>not</strong> the permanent pallet tags printed out of the WMS at cold storage. They exist for one reason: to give every pallet an addressable identifier through the staging yard handoff.</p>
+        <div class="format-block">
+          <div class="format-code">#FT0000001</div>
+          <div class="format-desc"><strong>#FT</strong> followed by a sequential number. The prefix is encoded in the barcode but the app strips it for display — internally the pallet is just the numeric portion. Sequential numbers must not repeat across rolls or crews.</div>
+        </div>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Order rolls from the label vendor with the #FT prefix and sequential numbering.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Plan one roll per harvest checker per season — at ~30,000-pallet scale across the operation, that's roughly the right volume per crew.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Confirm with the vendor whether they generate the sequence or whether the customer needs to supply it.</div></div></li>
+        </ul>
+        <div class="warning"><strong>Duplicate numbers fail silently.</strong> If two rolls share a number, the second pallet to scan that ID will be treated as a re-scan of the first — counts and lineage will be wrong but no error fires. Confirm uniqueness across <em>every</em> roll, not just within a single roll, before distributing to crews.</div>
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113315.png" alt="Add Field Tickets — empty state ready for #FT sticker scan">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §1.3 WMS Integration Prerequisites -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:900px;margin:0 auto">
+      <span class="persona-key office">Office</span>
+      <div class="feature-label">Integration Setup</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Two modules drive the WMS connection — only one is always required</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:8px">The customer purchases the WMS modules directly from the WMS vendor. The implementation team owns the PickTrace side of the integration. Confirm with engineering whether a direct API integration will be ready in time for harvest before the customer commits to the FTP module.</p>
+      <div class="split-2">
+        <div class="col">
+          <span class="req-tag always">Always required</span>
+          <h4>Receiving / Inventory Import module</h4>
+          <p>The WMS-side module that accepts inbound pallet records from PickTrace at receiving time. Required regardless of whether the integration runs over FTP or a direct API. Approximate cost is in the low four figures from the WMS vendor.</p>
+        </div>
+        <div class="col">
+          <span class="req-tag conditional">Conditional</span>
+          <h4>FTP / Custom Job Setup module</h4>
+          <p>The WMS-side module that handles file-based exchange. Only required if the PickTrace ↔ WMS integration runs over FTP. If a direct API integration is in scope and ships in time for harvest, this module is unnecessary — don't let the customer purchase it on a guess.</p>
+        </div>
+      </div>
+      <div class="tip"><strong>Confirm before commit.</strong> Get the API status from engineering in writing before the customer commits to the FTP module. If the API ships, the FTP module is wasted budget; if the API slips past harvest, the FTP module is the fallback the customer needs immediately.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §1.4 Truck QR Magnet Registration -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key office">Office</span>
+        <div class="feature-label">Truck Setup</div>
+        <h2>Register every swamper and larger truck before season start</h2>
+        <p>The entire In-the-Field and Staging Yard flows depend on each truck having a QR magnet that's been pre-registered and physically attached. Scanning the magnet on a checker's or yard manager's device auto-populates the load ticket — destination, current site, driver, company, trailer ID — so the driver never has to touch the app and the checker doesn't type anything.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Inventory every active swamper and every larger truck. Confirm the count with the Harvest Manager.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Coordinate with engineering to register each truck and produce its QR magnet. The registration mechanism is owned by the engineering team — get the workflow from them rather than improvising.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Apply the physical magnets to the trucks before the first day of harvest. Place them where a person standing on the ground with a C66 can scan them without climbing.</div></div></li>
+          <li class="step"><div class="step-num">4</div><div><div class="step-text">Walk the placement with the Harvest Manager and a sample C66 — confirm scan range, lighting, and angle work in actual field conditions, not just a parking lot test.</div></div></li>
+        </ul>
+        <div class="warning"><strong>Missing magnets break the design.</strong> If a truck shows up without a registered magnet, the checker has to fall back to manual entry on the load-ticket screen — which kills the no-driver-touches-the-app premise and breaks discrepancy tracking downstream because the load ticket gets typed instead of generated. Catch missing magnets in the pre-season walkthrough, not on day one of harvest.</div>
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113152.png" alt="New Load Ticket form — what the checker sees before scanning the truck QR">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §1.5 Receiving App on the C66s -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key checker">Harvest Checker</span> <span class="persona-key office" style="margin-left:6px">Office</span>
+      <div class="feature-label">Device Deployment</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Get the Receiving App onto every C66 the harvest checkers use</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">Checkers already run the Field App on managed C66 devices. The Receiving App is a <strong>separate</strong> app from the same App Store / Play Store — it has to be installed alongside the Field App so the same checker can toggle between both on the same device. The engineering team has a QR-code distribution mechanism for installs at scale.</p>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div><div class="step-text">Confirm device count with the Harvest Manager (~50 C66s at this customer's scale).</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-text">Coordinate with engineering for the QR-code install link.</div></div></li>
+        <li class="step"><div class="step-num">3</div><div><div class="step-text">Walk a representative checker through the install on one device. Once that works, the customer can roll it out across the fleet themselves.</div></div></li>
+        <li class="step"><div class="step-num">4</div><div><div class="step-text">Confirm checkers can toggle between Field App and Receiving App on the same device without re-authenticating each time.</div></div></li>
+      </ul>
+      <div class="tip"><strong>User accounts before installs.</strong> Receiving App authentication is email/password at the user level — not the badge-based login of the Field App. Every checker who will use Receiving needs a user account created before the install rollout. Plan account provisioning alongside the device deployment, not after.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §1.6 Persona Map -->
+<div class="section section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:6px">
+      <div class="feature-label" style="text-align:center">Persona Index</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:10px">Who uses what, and where</h2>
+      <p style="font-size:14px;color:#555;max-width:640px;margin:0 auto">Four personas drive the receiving lifecycle. Each is colored consistently throughout the rest of this guide — the pill at the top of every workflow section tells you whose stage you're reading.</p>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <span class="persona-badge checker">Harvest Checker</span>
+        <h4>Loadout in the field</h4>
+        <div class="pc-meta">Field App + Receiving App on the same C66 · Device scope</div>
+        <p>Runs the existing T&amp;P label-roll flow and the new dual-scan loadout flow on one device. The driver never touches the app — the checker handles both ends.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-badge yard">Staging Yard Manager</span>
+        <h4>Northern-region handoff</h4>
+        <div class="pc-meta">Receiving App on smartphone or C66 · Destination scope</div>
+        <p>Owns the swamper-to-larger-truck handoff. Marks swampers Received, opens larger-truck loads, scans #FT pallets across as forklifts move them.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-badge receiver">Cold-Storage Receiver</span>
+        <h4>At the receiving facility</h4>
+        <div class="pc-meta">Receiving App · Destination scope · Third-party user accounts</div>
+        <p>Forklift drivers at the third-party packer/shipper. Scan trucks in, scan pallets per-pallet, capture box-count discrepancies, trigger the WMS write.</p>
+      </div>
+      <div class="persona-card">
+        <span class="persona-badge office">Invoice Auditor Team</span>
+        <h4>Office oversight</h4>
+        <div class="pc-meta">PickTrace Office (web) · Org-wide access</div>
+        <p>Reconciles field-credited counts vs. receiver-counted counts on the Discrepancy page. Owned by the Controller; this team works the queue.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-setup -->
+
+<!-- ═══ TAB 2 — IN THE FIELD ═══ -->
+<div id="tab-field" class="tab-panel" style="display:none">
+
+<div class="hero">
+  <div class="hero-label">Stage 2 of 5 · In the Field</div>
+  <h1>Harvest checkers create field tickets at loadout</h1>
+  <p>One person — the Harvest Checker — runs both the existing T&amp;P label-roll flow and the new Receiving flow on the same C66. The driver never touches the app. Two anchors hold the whole flow together: a QR magnet on the truck and a #FT sticker on every pallet.</p>
+  <div class="flow-strip">
+    <span class="flow-step">Setup</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step is-current">In the Field</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Staging Yard Handoff</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">At Cold Storage</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Office Oversight</span>
+  </div>
+</div>
+
+<!-- §2.1 Field App Doesn't Change -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key checker">Harvest Checker</span>
+      <div class="feature-label">T&amp;P Unchanged</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">T&amp;P stays exactly as it was</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">Checkers continue to check employees in, pair them to label rolls, and run T&amp;P exactly as they have. The Field App workflow is untouched.</p>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px"><strong>No field tickets are created in the Field App.</strong> This is the most important reframing for anyone coming from prior PickTrace deployments: in this customer's setup, "field ticket" is a Receiving-App concept tied to the #FT sticker on a pallet, not a Field-App concept tied to a piece-rate group. If you're trained on the Field-App field-ticket flow from another account, set that mental model aside before reading the rest of this tab.</p>
+      <div class="tip"><strong>Same device, different app.</strong> The same C66 the checker uses for T&amp;P is also where they'll run the Receiving App in the next section. They toggle apps on the device — they don't switch devices.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §2.2 Truck QR Magnets -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key checker">Harvest Checker</span>
+        <div class="feature-label">Truck Arrival</div>
+        <h2>Every swamper has a QR magnet</h2>
+        <p>The QR magnet pre-registered to the truck/driver assignment is what kicks off a load ticket. The driver doesn't open the app. The checker scans the magnet on the swamper, the load ticket auto-populates with destination, current site, driver, company, and trailer ID, and the checker taps Save and Continue.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Open the Receiving App on the C66, tap <strong>New</strong>.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Scan the QR magnet on the swamper. The logistics screen fills in.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Confirm the auto-populated fields, tap <strong>Save and Continue</strong>.</div></div></li>
+        </ul>
+        <div class="tip"><strong>Auto-fill, not retype.</strong> Once a magnet has been scanned for a given truck, driver/company/trailer auto-populate on subsequent scans — the checker confirms, doesn't retype. If a value is wrong, the magnet registration upstream is wrong; flag it rather than editing in the load ticket.</div>
+      </div>
+      <div class="feature-media">
+        <div class="phone-group">
+          <div class="phone-frame">
+            <img src="images/image.png" alt="Empty Load Tickets screen — checker taps + New to start a new load before scanning the truck QR magnet">
+          </div>
+          <div class="phone-frame">
+            <img src="images/Screenshot 2026-03-25 113235.png" alt="New Load Ticket — auto-populated logistics form after the truck QR magnet scan">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §2.3 Dual-Scan Pallet Loadout -->
+<div class="section">
+  <div class="container">
+    <div class="feature">
+      <div class="feature-text">
+        <span class="persona-key checker">Harvest Checker</span>
+        <div class="feature-label">Loadout</div>
+        <h2>Apply a #FT sticker, scan the sticker, scan a case, enter box count</h2>
+        <p>This is the dual-scan flow. It exists specifically because the staging yard handoff needs an addressable pallet identifier — without a sticker on the pallet, there's nothing to scan when pallets move from one truck to another. Every pallet gets the same four-step treatment as it goes onto the swamper.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Apply a #FT sticker to the pallet as it's being loaded onto the swamper.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">In the Receiving App, scan the #FT sticker.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Scan any random case on that same pallet. The system uses the case label to backfill production data — block, variety, pack style, crew.</div></div></li>
+          <li class="step"><div class="step-num">4</div><div><div class="step-text">Enter the total box count on the pallet when prompted.</div><div class="step-sub">This becomes the field-credited count that the cold-storage receiver will reconcile against later.</div></div></li>
+        </ul>
+        <p style="font-size:13px;color:#666;margin-top:10px">This dual-scan flow is distinct from the single-reference-scan flow used by some other table-grape customers. Don't mix the two — the workflows look similar but produce different downstream data.</p>
+        <div class="critical"><strong>Confirm the build is shipped.</strong> The dual-scan UI is being built by the engineering team specifically for this customer's flow. Verify the build is in the deployed app before training rollout — otherwise the second scan won't be accepted and the field ticket won't create.</div>
+      </div>
+      <!-- TODO: 113341.png shows non-#FT IDs (032501/032502 — old T&P field-ticket format) because it was captured before the dual-scan build shipped. Acceptable as a placeholder for the "tickets-on-a-load" visual, but swap it for a true #FT-prefixed capture once the dual-scan UI is deployed. -->
+      <div class="feature-media">
+        <div class="phone-group">
+          <div class="phone-frame">
+            <img src="images/Screenshot 2026-03-25 113315.png" alt="Add Field Tickets — empty state, ready for #FT sticker scan">
+          </div>
+          <div class="phone-frame">
+            <img src="images/Screenshot 2026-03-25 113341.png" alt="Field tickets added to the load (placeholder — captured pre-dual-scan, IDs shown are not #FT-prefixed)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §2.4 Sign Off, Move to In Transit -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key checker">Harvest Checker</span>
+        <div class="feature-label">Departure</div>
+        <h2>Sign off, mark In Transit, swamper leaves</h2>
+        <p>When the swamper is loaded, the truck driver signs off on the checker's device. The checker signs off. The checker then manually moves the load from <em>Loading</em> to <em>In Transit</em> before the truck pulls away.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Driver signs off on the checker's C66.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Checker signs off.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Checker long-presses the load and changes status from Loading to In Transit.</div></div></li>
+        </ul>
+        <div class="tip"><strong>In Transit fires twice in this customer's lifecycle.</strong> Once here, when the swamper leaves the field. Once again at the staging yard, when the larger truck leaves for cold storage. Both transitions are manual and both feed the office-tab transit timer. Surface this twice-fired pattern in training so neither the checker nor the yard manager assumes the other handled it.</div>
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113508.png" alt="Load options menu — Edit, QR Code, Share PDF, status change">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-field -->
+
+<!-- ═══ TAB 3 — STAGING YARD HANDOFF ═══ -->
+<div id="tab-handoff" class="tab-panel" style="display:none">
+
+<div class="hero">
+  <div class="hero-label">Stage 3 of 5 · Staging Yard Handoff</div>
+  <h1>Pallets move from swampers to larger trucks at the staging yard</h1>
+  <p>In the northern region, swampers can't drive the full distance to cold storage. They offload at a staging yard onto larger trucks. The Staging Yard Manager runs the handoff using the Receiving App. Drivers still don't touch the app. The southern region skips this stage entirely.</p>
+  <div class="flow-strip">
+    <span class="flow-step">Setup</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">In the Field</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step is-current">Staging Yard Handoff</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">At Cold Storage</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Office Oversight</span>
+  </div>
+</div>
+
+<!-- Region escape hatch -->
+<div class="section" style="padding:30px 0">
+  <div class="container">
+    <div class="tip" style="max-width:780px;margin:0 auto;font-size:13px"><strong>Southern-region operations skip this stage.</strong> If the operation is in the southern region, swampers drive directly to cold storage — jump to <strong>Stage 4: At Cold Storage</strong>. The rest of this tab applies to the northern region only.</div>
+  </div>
+</div>
+
+<!-- §3.1 Two Regions, Two Flows -->
+<div class="section section-alt">
+  <div class="container">
+    <div style="max-width:900px;margin:0 auto">
+      <span class="persona-key yard">Staging Yard Manager</span>
+      <div class="feature-label">Region Difference</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Northern region uses the handoff. Southern region doesn't.</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">In the south, swampers go straight to cold storage. There's no handoff and the entire Stage 3 workflow is skipped.</p>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">In the north, geography forces a handoff. Swampers drive a short distance to a staging yard. Pallets are consolidated onto one or — when peak volume overflows a single trailer — two larger trucks. The larger trucks then drive the rest of the way to cold storage. Everything below applies to the northern flow.</p>
+      <div class="handoff-flow">
+        <div class="handoff-node">
+          <div class="handoff-node-title">Field</div>
+          <div class="handoff-node-sub">Loadout</div>
+        </div>
+        <span class="handoff-arrow">→</span>
+        <div class="handoff-node">
+          <div class="handoff-node-title">Swamper</div>
+          <div class="handoff-node-sub">Short trip</div>
+        </div>
+        <span class="handoff-arrow">→</span>
+        <div class="handoff-node is-yard">
+          <div class="handoff-node-title">Staging Yard</div>
+          <div class="handoff-node-sub">Handoff</div>
+        </div>
+        <span class="handoff-arrow">→</span>
+        <div class="handoff-node">
+          <div class="handoff-node-title">Larger Truck</div>
+          <div class="handoff-node-sub">Long haul</div>
+        </div>
+        <span class="handoff-arrow">→</span>
+        <div class="handoff-node is-cold">
+          <div class="handoff-node-title">Cold Storage</div>
+          <div class="handoff-node-sub">Receiving</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §3.2 Mark the Swamper Received -->
+<div class="section">
+  <div class="container">
+    <div class="feature">
+      <div class="feature-text">
+        <span class="persona-key yard">Staging Yard Manager</span>
+        <div class="feature-label">Swamper Arrival</div>
+        <h2>Scan the swamper's QR, mark the load Received</h2>
+        <p>When the swamper arrives at the staging yard, the Staging Yard Manager scans the QR magnet and marks the load <strong>Received</strong>. This is intentional even though the pallets aren't at cold storage yet — the swamper itself is going no further. The larger truck takes the pallets onward as a separate load.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Open the Receiving App, scan the QR magnet on the arriving swamper.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Confirm the load that pulls up matches the expected swamper.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Mark the load Received.</div></div></li>
+        </ul>
+        <div class="tip"><strong>Forward reference.</strong> The office side will see swamper loads showing as Received with their pallets transferred off — see <em>Stage 5 → Status &amp; Timeline</em>. The "Received" event here is a structural marker, not an operational one. Configure office reporting accordingly.</div>
+        <!-- TODO: confirm with engineering whether the platform models the swamper's destination as the staging yard, or as cold-storage with an early Received event. The transcript and cheat sheet imply the former (the office filter in §5.2 only makes sense if the staging yard is a destination type), but this isn't crisply stated. Verify during walkthrough and update wording if needed. -->
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113508.png" alt="Load options menu — used to change status to Received at staging yard">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §3.3 Open the Larger Truck Load -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key yard">Staging Yard Manager</span>
+        <div class="feature-label">New Load Ticket</div>
+        <h2>Scan the larger truck, create its load ticket</h2>
+        <p>Same QR-scan flow as the field — larger trucks have their own QR magnets, registered the same way. The yard manager taps <strong>New</strong>, scans the magnet on the larger truck, the load ticket auto-populates, save and continue. From here on, the larger truck behaves like any other load, with its own destination (cold storage) and its own driver/company/trailer details.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Tap <strong>New</strong> in the Receiving App.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Scan the QR magnet on the larger truck.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Confirm the destination is cold storage (not the staging yard) and tap <strong>Save and Continue</strong>.</div></div></li>
+        </ul>
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113235.png" alt="New Load Ticket — auto-populated logistics for the larger truck">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §3.4 Transfer Pallets Between Trucks -->
+<div class="section">
+  <div class="container">
+    <div class="feature">
+      <div class="feature-text">
+        <span class="persona-key yard">Staging Yard Manager</span>
+        <div class="feature-label">The Handoff</div>
+        <h2>Scan each #FT pallet sticker as it moves trucks</h2>
+        <p>As the forklift moves each pallet from the swamper to the larger truck, the manager scans the #FT sticker on the pallet. The system recognizes the pallet is currently on the swamper load and prompts to move it to the new larger-truck load. Confirm; the pallet flips trucks. Pallets can only live on one load at a time — this enforces correctness without any manual reconciliation.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">Forklift moves a pallet from the swamper toward the larger truck.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">Manager scans the #FT sticker on that pallet.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">App prompts: "This pallet is on the swamper load. Move to the larger truck load?" — confirm.</div></div></li>
+          <li class="step"><div class="step-num">4</div><div><div class="step-text">Repeat for every pallet leaving the swamper.</div></div></li>
+          <li class="step"><div class="step-num">5</div><div><div class="step-text">When the larger truck is loaded, get the driver to sign off, sign off as yard manager, and move the larger truck's load from Loading to In Transit.</div></div></li>
+        </ul>
+        <div class="critical"><strong>Two-truck splits are common at peak.</strong> If the larger truck fills up before the swamper is empty, repeat §3.3 and §3.4 with a second larger truck for the remaining pallets. Both larger trucks become independent loads heading to cold storage. The original swamper load stays Received at the staging yard regardless of how many larger trucks the pallets split across.</div>
+        <div class="tip"><strong>Second In Transit fire.</strong> The transition you trigger in step 5 is the second In Transit event of this customer's lifecycle (the first was the swamper leaving the field). Both feed the office timeline.</div>
+        <!-- TODO: capture handoff-specific screenshot from the recording — the placeholder image below is the closest existing visual showing tickets-on-a-load and should be swapped on the next pass. -->
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/Screenshot 2026-03-25 113341.png" alt="Pallets on a load — placeholder for handoff scan visual">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-handoff -->
+
+<!-- ═══ TAB 4 — AT COLD STORAGE ═══ -->
+<div id="tab-cold" class="tab-panel" style="display:none">
+
+<div class="hero">
+  <div class="hero-label">Stage 4 of 5 · At Cold Storage</div>
+  <h1>Third-party receivers scan pallets in and write to the WMS</h1>
+  <p>Cold storage and packing are outsourced. Forklift drivers at the receiving facility — third-party staff, not the customer's employees — use the Receiving App on user accounts that log into the customer's WMS instance. Discrepancies get caught here, in real time.</p>
+  <div class="flow-strip">
+    <span class="flow-step">Setup</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">In the Field</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Staging Yard Handoff</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step is-current">At Cold Storage</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Office Oversight</span>
+  </div>
+</div>
+
+<!-- §4.1 Third-Party Users on the Customer's WMS -->
+<div class="section">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key receiver">Cold-Storage Receiver</span>
+        <div class="feature-label">Access Model</div>
+        <h2>Third-party staff, customer's WMS account</h2>
+        <p>Forklift drivers at the cold-storage facility don't work for the customer — they work for the third-party packer/shipper. They get user accounts on PickTrace (email and password — Receiving App auth is user-level, not badge-based) scoped to the receiving site only. When they print permanent pallet tags from the WMS at receiving time, they're logged into the <em>customer's</em> WMS instance, not their employer's. The pallet records land in the customer's WMS account.</p>
+        <ul class="steps">
+          <li class="step"><div class="step-num">1</div><div><div class="step-text">The customer's Controller owns WMS account setup and per-user provisioning on the WMS side.</div></div></li>
+          <li class="step"><div class="step-num">2</div><div><div class="step-text">PickTrace user accounts (email + password) are created for each third-party forklift driver who needs Receiving access.</div></div></li>
+          <li class="step"><div class="step-num">3</div><div><div class="step-text">Each account is destination-scoped to the cold-storage receiving site only — no badge needed.</div></div></li>
+        </ul>
+        <div class="tip"><strong>Destination scope, not org-wide.</strong> Scope these accounts so they only see loads inbound to the cold-storage receiving site. Org-wide visibility would surface unrelated loads and create noise the third-party team doesn't need to see.</div>
+        <div class="warning"><strong>Multi-party setup.</strong> The Controller (customer) and the Cold-Storage Manager (third-party) need to align on which accounts to provision before training rolls out. Coordination here is the slow path — don't leave it for the day before harvest.</div>
+      </div>
+      <div class="feature-media">
+        <div class="phone-frame">
+          <img src="images/image copy 2.png" alt="Field Ticket tab on the receiver's device — surfaces inbound field tickets scoped to the receiver's destination">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §4.2 Scan the Truck, Then Each Pallet -->
+<div class="section section-alt">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key receiver">Cold-Storage Receiver</span>
+      <div class="feature-label">Receiving Flow</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">One truck scan, one scan per pallet</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">The cold-storage flow mirrors the field flow at the entry point — scan the truck's QR magnet to pull up the load — and then diverges into a per-pallet flow with discrepancy capture. Every pallet gets scanned individually as it comes off the truck.</p>
+      <ul class="steps">
+        <li class="step"><div class="step-num">1</div><div><div class="step-text">Forklift driver scans the truck's QR magnet — the load and all its pallets pull up in the Receiving App.</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-text">As each pallet comes off, scan its #FT sticker. This marks the pallet received and unlocks the box-count edit field.</div></div></li>
+        <li class="step"><div class="step-num">3</div><div><div class="step-text">If the actual count doesn't match what the field credited, enter the actual count when prompted. (See §4.3.)</div></div></li>
+        <li class="step"><div class="step-num">4</div><div><div class="step-text">Once every pallet is scanned, move the load from <em>In Transit</em> to <em>Received</em>. <strong>This transition triggers the WMS write</strong> — pallets are created in the WMS in the customer's account.</div></div></li>
+        <li class="step"><div class="step-num">5</div><div><div class="step-text">From the WMS, bulk-print the permanent pallet tags. Apply them to the pallets — either stick over the temporary #FT sticker or rip the temp sticker off and replace. Either approach works.</div></div></li>
+      </ul>
+      <div class="tip"><strong>Per-pallet, not bulk.</strong> A shortcut "count-them-all-and-mark-received" path exists in the app. Discourage it. Per-pallet scanning is the only way to capture box-count discrepancies — and discrepancies are the customer's primary value driver for adopting Receiving in the first place. Skipping the per-pallet step throws away the ROI.</div>
+      <div class="critical"><strong>Setup gates this stage.</strong> The WMS integration must be live and every retail pack style must be set up in PickTrace (Stage 1) before the first cold-storage scan. Otherwise the WMS write at step 4 either fails outright or creates malformed records that have to be reconciled by hand.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §4.3 Discrepancy Capture -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key receiver">Cold-Storage Receiver</span>
+      <div class="feature-label">Box Count Mismatch</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Surface mismatches at scan time, not week-end</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">Discrepancies get captured here, in real time, as pallets are received. The receiver isn't being asked to investigate gaps — just to enter what's actually on the pallet when it doesn't match what the field credited. The Invoice Auditor Team (Stage 5) works the queue from there.</p>
+      <div class="tip"><strong>Worked example.</strong> Field credited 65 boxes on a pallet. Receiver counts 40. Receiver enters 40. The 25-box gap is flagged on the office Discrepancy page automatically — no paperwork, no follow-up call. The Invoice Auditor Team picks it up and investigates the source: under-credit at loadout, short-pack from the crew, loss in transit, or something else.</div>
+      <div class="warning"><strong>Count, don't just scan.</strong> The third-party receiving team needs to understand the expectation explicitly: they're being asked to count, not just scan. If they default to scan-and-move, the discrepancy data is empty and the office tab loses the value-add. Surface this in third-party training, not just customer training.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-cold -->
+
+<!-- ═══ TAB 5 — OFFICE OVERSIGHT ═══ -->
+<div id="tab-office" class="tab-panel" style="display:none">
+
+<div class="hero">
+  <div class="hero-label">Stage 5 of 5 · Office Oversight</div>
+  <h1>Track every load, audit every count</h1>
+  <p>The office gives the Controller and the Invoice Auditor Team a real-time view of loads from field to cold storage and a Discrepancy page comparing field-credited vs. receiver-counted box counts. Two structural quirks of this customer's flow need to be configured around: the staging-yard "Received" event and the dual In Transit transitions.</p>
+  <div class="flow-strip">
+    <span class="flow-step">Setup</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">In the Field</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">Staging Yard Handoff</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">At Cold Storage</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step is-current">Office Oversight</span>
+  </div>
+</div>
+
+<!-- §5.1 Permissions & Personas -->
+<div class="section">
+  <div class="container">
+    <div class="feature">
+      <div class="feature-text">
+        <span class="persona-key office">Office</span>
+        <div class="feature-label">Role Setup</div>
+        <h2>Two permissions, four scopes</h2>
+        <p>In <em>Settings → User Roles</em>, scroll to the bottom. Two receiving permissions live there.</p>
+        <div style="margin:18px 0">
+          <div class="perm-row">
+            <div><div class="perm-name">Receiving</div><div class="perm-desc">Read, write, or edit on the office Receiving tab.</div></div>
+            <span class="perm-badge" style="background:#fce4ec;color:#c62828">Office tab</span>
+          </div>
+          <div class="perm-row">
+            <div><div class="perm-name">Receiving App</div><div class="perm-desc">Full access or no access on the mobile Receiving App.</div></div>
+            <span class="perm-badge" style="background:#e3f2fd;color:#0d47a1">Mobile app</span>
+          </div>
+        </div>
+        <p>Once Receiving App permission is enabled on a user, a <strong>scoping</strong> option appears on their profile. Use it to bind the user's view to their role.</p>
+        <div class="scope-grid">
+          <div class="scope-card">
+            <span class="scope-badge" style="background:#e3f2fd;color:#0d47a1">Device</span>
+            <h4>Harvest Checker</h4>
+            <p>Sees only loads created on their own device.</p>
+          </div>
+          <div class="scope-card">
+            <span class="scope-badge" style="background:#fff3e0;color:#e65100">Destination</span>
+            <h4>Staging Yard Manager</h4>
+            <p>Sees all loads inbound to the assigned staging yard.</p>
+          </div>
+          <div class="scope-card">
+            <span class="scope-badge" style="background:#e8f5e9;color:#1b5e20">Destination</span>
+            <h4>Cold-Storage Receiver</h4>
+            <p>Sees all loads inbound to the cold-storage receiving site. Third-party user accounts.</p>
+          </div>
+        </div>
+      </div>
+      <div class="feature-media" style="flex:1 1 0;min-width:0;flex-direction:column;align-items:stretch;gap:18px">
+        <div style="border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.1);border:1px solid #e0e0e0">
+          <img src="images/image copy 4.png" alt="User Roles settings — receiving permissions" style="width:100%;display:block">
+        </div>
+        <div style="border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.1);border:1px solid #e0e0e0;max-width:320px;margin:0 auto">
+          <img src="images/Screenshot 2026-03-25 114809.png" alt="Edit User Profile modal — receiving scope dropdown" style="width:100%;display:block">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §5.2 Status & Timeline -->
+<div class="section section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:30px">
+      <span class="persona-key office">Office</span>
+      <div class="feature-label" style="text-align:center">Status Tracking</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:10px">Five statuses, two In Transit transitions</h2>
+      <p style="font-size:14px;color:#555;max-width:680px;margin:0 auto">The office Receiving tab provides three views: <strong>Timeline</strong> (color-coded visual), <strong>List</strong> (grid format — better for high-volume operations with many drivers), and <strong>Discrepancy</strong>. Click into any load to see all pallets, box counts, pack styles, and crews.</p>
+    </div>
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot r"></div>
+        <div class="browser-dot y"></div>
+        <div class="browser-dot g"></div>
+        <div class="browser-bar-url"></div>
+      </div>
+      <img src="images/Screenshot 2026-03-25 115657.png" alt="Status summary bar — Building, Loading, In Transit, Delayed, Received">
+    </div>
+    <div class="status-desc-row">
+      <div class="status-desc-item"><strong>Building</strong>First pallet added — starts automatically</div>
+      <div class="status-desc-item"><strong>Loading</strong>Pallets actively being scanned onto the load</div>
+      <div class="status-desc-item"><strong>In Transit</strong>Manually triggered — fires twice in this customer's flow</div>
+      <div class="status-desc-item"><strong>Delayed</strong>Load exceeded expected transit time</div>
+      <div class="status-desc-item"><strong>Received</strong>Confirmed at destination (or staging yard, see below)</div>
+    </div>
+    <div style="margin-top:30px;max-width:780px;margin-left:auto;margin-right:auto">
+      <div class="browser-frame">
+        <div class="browser-bar">
+          <div class="browser-dot r"></div>
+          <div class="browser-dot y"></div>
+          <div class="browser-dot g"></div>
+          <div class="browser-bar-url"></div>
+        </div>
+        <img src="images/Screenshot 2026-03-25 115032.png" alt="Receiving office timeline view with status durations">
+      </div>
+    </div>
+    <div style="max-width:780px;margin:24px auto 0">
+      <div class="tip"><strong>In Transit fires twice.</strong> Manually triggered both times — once by the Harvest Checker when the swamper leaves the field, once by the Staging Yard Manager when the larger truck leaves the staging yard. The office timeline shows both segments. (Southern-region loads only fire once because there's no handoff.)</div>
+      <div class="tip"><strong>Received at the staging yard, by design.</strong> Swampers get marked Received at the staging yard — not at cold storage — because the swamper itself goes no further. The pallets continue on the larger truck as a separate load.</div>
+      <div class="warning"><strong>Filter staging yards out of cold-storage reporting.</strong> Staging-yard rows on the timeline show as Received with their pallets transferred off. The "Received" there is structural, not operational. When grouping by destination, exclude staging-yard destinations to get a clean view of what actually arrived at cold storage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §5.3 Discrepancy Page -->
+<div class="section">
+  <div class="container">
+    <div style="max-width:780px;margin:0 auto">
+      <span class="persona-key office">Office</span>
+      <div class="feature-label">Discrepancy</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;margin-bottom:14px">Catch box-count mismatches before they hit inventory</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">The Discrepancy page surfaces gaps between field-credited and receiver-counted box counts at the field-ticket (per-pallet) level. The Invoice Auditor Team owns this view. Receiving feeds sellable inventory directly — errors here have downstream sales impact.</p>
+      <div class="critical"><strong>Inventory impact.</strong> The receiving process feeds directly into what the customer can sell. Don't disrupt this process at peak — fruit needs to reach the cooler as fast as possible. Build the auditor workflow around catching mismatches without slowing the receiving floor down.</div>
+      <div class="tip">
+        <strong>Worked example.</strong><br>
+        — Field credited: <strong>65 boxes</strong> on pallet <code>#FT4831</code><br>
+        — Receiver counted: <strong>40 boxes</strong><br>
+        — Gap: <strong>25 boxes</strong><br>
+        — Auditor action: investigate the source — under-credit at loadout, short-pack from the crew, loss in transit, or something else. The page surfaces the gap; the team works it.
+      </div>
+      <div class="warning"><strong>Work in progress.</strong> The Discrepancy page is actively being developed. Field-ticket-level mismatch surfacing is in place, but the full reconciliation workflow isn't finalized. Confirm the latest state with engineering before training the auditor team — wording and available actions may shift between now and harvest.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §5.4 Unit Search -->
+<div class="section section-alt">
+  <div class="container">
+    <div class="feature feature-reverse">
+      <div class="feature-text">
+        <span class="persona-key office">Office</span>
+        <div class="feature-label">Unit Search</div>
+        <h2>Trace any unit back to the field</h2>
+        <p>Scan or paste any unit ID — case barcode, #FT sticker, anything with a unique ID — to pull the full production record: the employee who picked it, the crew, pick time, and any notes. If receiving counted 40 but the production record shows 65, the discrepancy is immediately visible at the unit level. Notes added here stay attached to the record and resurface the next time the unit is scanned.</p>
+      </div>
+      <div class="feature-media">
+        <div class="phone-group">
+          <div class="phone-frame">
+            <img src="images/image copy 3.png" alt="Unit Search — production record details">
+          </div>
+          <div class="phone-frame">
+            <img src="images/Screenshot 2026-03-25 114534.png" alt="Unit Search with annotations highlighting the production record">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- §5.5 Load Summary Sharing -->
+<div class="section">
+  <div class="container">
+    <div style="text-align:center;max-width:760px;margin:0 auto 40px">
+      <div class="feature-label" style="text-align:center">Load Summary</div>
+      <h2 style="font-size:26px;font-weight:700;color:#1a1a2e;line-height:1.3;margin-bottom:14px">Share a load via QR code or PDF</h2>
+      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:14px">Long-press a load and select <strong>QR Code</strong> or <strong>Download PDF</strong>. The QR code can be scanned by a receiver to pull the load up instantly; alternatively, every receiving device automatically shows all loads inbound to its destination, so no QR is strictly needed for the standard arrival path.</p>
+      <p style="font-size:14px;color:#555;line-height:1.8">The PDF surfaces logistics at the top — driver, employer, crews represented, destination — and below that the total field-ticket count with same-pack groupings collapsed and variants broken out. Useful as a paper trail or hand-off artifact when devices aren't available.</p>
+    </div>
+    <div class="phone-group quad">
+      <div class="phone-frame">
+        <img src="images/Screenshot 2026-03-25 113508.png" alt="Load options menu — QR Code, Share PDF, Edit, Delete">
+      </div>
+      <div class="phone-frame">
+        <img src="images/Screenshot 2026-03-25 114240.png" alt="Load Ticket detail — annotated view of the load summary">
+      </div>
+      <div class="phone-frame">
+        <img src="images/image copy.png" alt="Load PDF — logistics, crews, and pack-style splits">
+      </div>
+      <div class="phone-frame">
+        <img src="images/Screenshot 2026-03-25 114329.png" alt="Load QR code for sharing with receiver">
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-office -->
+
+<!--
+  Image inventory:
+  - Used: image.png, image copy.png, image copy 2.png, image copy 3.png, image copy 4.png,
+    Screenshot 2026-03-25 113152.png, 113235.png, 113315.png, 113341.png, 113508.png,
+    114240.png, 114329.png, 114534.png, 114809.png, 115032.png, 115657.png.
+  - Skipped (redundant/empty): Screenshot 2026-03-25 114537.png (blank capture),
+    Screenshot 2026-03-25 114545.png (duplicate of 114534 without annotations).
+  - Deprecated, left in folder, not referenced (out of scope for this customer's flow):
+    Screenshot 2026-03-25 112410.png (Field App FT dropdown — feature not used here),
+    Screenshot 2026-03-25 113626.png (scan-without-FT pallet count — feature not used here).
+-->
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+  document.getElementById('tab-' + name).style.display = 'block';
+  document.querySelectorAll('.pt-nav button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
